@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2026 Azzar Budiyanto / LilyOpenCMS.
+All rights reserved.
+
+Contact: azzar.mr.zs@gmail.com for inquiries.
+*/
 const express = require('express');
 const cors = require('cors');
 const { spawn, execFile } = require('child_process');

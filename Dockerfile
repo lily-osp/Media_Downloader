@@ -1,3 +1,8 @@
+# Copyright (c) 2026 Azzar Budiyanto / LilyOpenCMS.
+# All rights reserved.
+#
+# Contact: azzar.mr.zs@gmail.com for inquiries.
+
 FROM node:20-bookworm-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
