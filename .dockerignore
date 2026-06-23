@@ -1,0 +1,9 @@
+node_modules
+venv
+.git
+.gitignore
+.dockerignore
+LICENSE
+*.mp4
+*.mkv
+*.webm
