@@ -3,7 +3,7 @@
 #
 # Contact: azzar.mr.zs@gmail.com for inquiries.
 
-FROM node:20-bookworm-slim
+FROM node:22-bookworm-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
@@ -20,7 +20,7 @@ RUN npm ci --only=production
 COPY . .
 
 RUN python3 -m venv venv && \
-    ./venv/bin/pip install --no-cache-dir --upgrade yt-dlp
+    ./venv/bin/pip install --no-cache-dir --upgrade yt-dlp yt-dlp-ejs
 
 EXPOSE 3300
 

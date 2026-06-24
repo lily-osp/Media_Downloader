@@ -51,6 +51,7 @@ pnpm-debug.log*
 *.tmp
 temp/
 tmp/
+cookies.txt
 
 # OS-specific files
 .DS_Store

@@ -19,7 +19,24 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const YT_DLP = [path.join(__dirname, 'venv', 'bin', 'yt-dlp'), '--js-runtimes', 'node', '--remote-components', 'ejs:github'];
+const COOKIES_FILE = path.join(__dirname, 'cookies.txt');
+
+function getCookieArgs() {
+  try {
+    const content = fs.readFileSync(COOKIES_FILE, 'utf8');
+    const hasValid = content.split('\n').some(l => l.trim() && !l.startsWith('#') && l.includes('\t'));
+    return hasValid ? ['--cookies', COOKIES_FILE] : [];
+  } catch { return []; }
+}
+
+function ytDlpArgs() {
+  return [
+    path.join(__dirname, 'venv', 'bin', 'yt-dlp'),
+    '--js-runtimes', 'node',
+    '--remote-components', 'ejs:github',
+    ...getCookieArgs()
+  ];
+}
 
 function sanitizeFilename(name) {
   return name.replace(/[<>:"/\\|?*]/g, '_').substring(0, 200);
@@ -97,7 +114,7 @@ app.post('/api/info', async (req, res) => {
     return;
   }
 
-  const args = [...YT_DLP, '--dump-json', '--no-download', url];
+  const args = [...ytDlpArgs(), '--dump-json', '--no-download', url];
   const proc = execFile(args[0], args.slice(1), {
     timeout: 30000,
     maxBuffer: 10 * 1024 * 1024
@@ -161,11 +178,11 @@ app.post('/api/download', async (req, res) => {
 
   let args;
   if (type === 'audio') {
-    args = [...YT_DLP, '-x', '--audio-format', 'mp3', '--audio-quality', '0', '-o', tmpFile, url];
+    args = [...ytDlpArgs(), '-x', '--audio-format', 'mp3', '--audio-quality', '0', '-o', tmpFile, url];
   } else if (format_id) {
-    args = [...YT_DLP, '-f', `${format_id}+bestaudio/${format_id}/best`, '--remux-video', 'mp4', '-o', tmpFile, url];
+    args = [...ytDlpArgs(), '-f', `${format_id}+bestaudio/${format_id}/best`, '--remux-video', 'mp4', '-o', tmpFile, url];
   } else {
-    args = [...YT_DLP, '-f', 'best[ext=mp4]/best', '-o', tmpFile, url];
+    args = [...ytDlpArgs(), '-f', 'best[ext=mp4]/best', '-o', tmpFile, url];
   }
 
   const proc = spawn(args[0], args.slice(1), {
@@ -199,6 +216,29 @@ app.post('/api/download', async (req, res) => {
       try { fs.unlinkSync(tmpFile); } catch (_) {}
     });
   });
+});
+
+app.post('/api/cookies', (req, res) => {
+  const { content } = req.body;
+  if (!content || typeof content !== 'string') {
+    return res.status(400).json({ error: 'Cookie content is required' });
+  }
+  try {
+    fs.writeFileSync(COOKIES_FILE, content, 'utf8');
+    res.json({ success: true, hasCookies: content.split('\n').some(l => l.trim() && !l.startsWith('#') && l.includes('\t')) });
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to write cookies' });
+  }
+});
+
+app.get('/api/cookies', (req, res) => {
+  try {
+    const content = fs.readFileSync(COOKIES_FILE, 'utf8');
+    const hasCookies = content.split('\n').some(l => l.trim() && !l.startsWith('#') && l.includes('\t'));
+    res.json({ hasCookies, length: content.split('\n').filter(l => l.trim() && !l.startsWith('#')).length });
+  } catch {
+    res.json({ hasCookies: false, length: 0 });
+  }
 });
 
 app.listen(PORT, () => {
