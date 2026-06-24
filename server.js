@@ -218,29 +218,6 @@ app.post('/api/download', async (req, res) => {
   });
 });
 
-app.post('/api/cookies', (req, res) => {
-  const { content } = req.body;
-  if (!content || typeof content !== 'string') {
-    return res.status(400).json({ error: 'Cookie content is required' });
-  }
-  try {
-    fs.writeFileSync(COOKIES_FILE, content, 'utf8');
-    res.json({ success: true, hasCookies: content.split('\n').some(l => l.trim() && !l.startsWith('#') && l.includes('\t')) });
-  } catch (e) {
-    res.status(500).json({ error: 'Failed to write cookies' });
-  }
-});
-
-app.get('/api/cookies', (req, res) => {
-  try {
-    const content = fs.readFileSync(COOKIES_FILE, 'utf8');
-    const hasCookies = content.split('\n').some(l => l.trim() && !l.startsWith('#') && l.includes('\t'));
-    res.json({ hasCookies, length: content.split('\n').filter(l => l.trim() && !l.startsWith('#')).length });
-  } catch {
-    res.json({ hasCookies: false, length: 0 });
-  }
-});
-
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:3300`);
 });
