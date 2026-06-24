@@ -29,6 +29,21 @@ self.addEventListener('fetch', (e) => {
   const { request } = e;
   const url = new URL(request.url);
 
+  // Share target: redirect shared URL into the app
+  if (request.method === 'GET' && url.searchParams.has('url')) {
+    const sharedUrl = url.searchParams.get('url');
+    e.respondWith(
+      caches.match('/').then((cached) => {
+        const response = cached || new Response('', { status: 302, headers: { Location: '/' } });
+        return new Response(response.body, {
+          status: 302,
+          headers: { 'Location': '/?url=' + encodeURIComponent(sharedUrl) }
+        });
+      })
+    );
+    return;
+  }
+
   // API calls: network only
   if (url.pathname.startsWith('/api/')) {
     e.respondWith(fetch(request));

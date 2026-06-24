@@ -809,6 +809,19 @@ function setStatus(msg, type, icon) {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
+
+// Handle shared URL from share target
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const sharedUrl = params.get('url') || params.get('text');
+  if (sharedUrl && sharedUrl.match(/^https?:\/\//)) {
+    urlInput.value = sharedUrl;
+    highlightPlatform(detectPlatform(sharedUrl));
+    toggleClearBtn();
+    history.replaceState(null, '', '/');
+    fetchMedia();
+  }
+})();
 </script>
 </body>
 </html>
