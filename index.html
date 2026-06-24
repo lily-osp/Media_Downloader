@@ -575,12 +575,12 @@ main {
 
   <!-- PLATFORMS -->
   <div class="platforms" id="platforms" role="list" aria-label="Supported platforms">
-    <span class="platform-badge" role="listitem"><i class="fa-brands fa-youtube"></i> YouTube</span>
-    <span class="platform-badge" role="listitem"><i class="fa-brands fa-facebook"></i> Facebook</span>
-    <span class="platform-badge" role="listitem"><i class="fa-brands fa-instagram"></i> Instagram</span>
-    <span class="platform-badge" role="listitem"><i class="fa-brands fa-tiktok"></i> TikTok</span>
-    <span class="platform-badge" role="listitem"><i class="fa-brands fa-x-twitter"></i> X</span>
-    <span class="platform-badge" role="listitem"><i class="fa-brands fa-threads"></i> Threads</span>
+    <span class="platform-badge" data-platform="youtube" role="listitem"><i class="fa-brands fa-youtube"></i></span>
+    <span class="platform-badge" data-platform="facebook" role="listitem"><i class="fa-brands fa-facebook"></i></span>
+    <span class="platform-badge" data-platform="instagram" role="listitem"><i class="fa-brands fa-instagram"></i></span>
+    <span class="platform-badge" data-platform="tiktok" role="listitem"><i class="fa-brands fa-tiktok"></i></span>
+    <span class="platform-badge" data-platform="x" role="listitem"><i class="fa-brands fa-x-twitter"></i></span>
+    <span class="platform-badge" data-platform="threads" role="listitem"><i class="fa-brands fa-threads"></i></span>
   </div>
 
   <hr class="rule-line" aria-hidden="true">
@@ -681,7 +681,7 @@ function detectPlatform(url) {
 function highlightPlatform(name) {
   document.querySelectorAll('.platform-badge').forEach(b => {
     b.classList.remove('active');
-    if (name && b.textContent.trim().toLowerCase().includes(name)) b.classList.add('active');
+    if (name && b.dataset.platform === name) b.classList.add('active');
   });
 }
 
