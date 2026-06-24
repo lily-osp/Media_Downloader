@@ -581,6 +581,7 @@ main {
     <span class="platform-badge" data-platform="tiktok" role="listitem"><i class="fa-brands fa-tiktok"></i></span>
     <span class="platform-badge" data-platform="x" role="listitem"><i class="fa-brands fa-x-twitter"></i></span>
     <span class="platform-badge" data-platform="threads" role="listitem"><i class="fa-brands fa-threads"></i></span>
+    <span class="platform-badge" data-platform="reddit" role="listitem"><i class="fa-brands fa-reddit"></i></span>
   </div>
 
   <hr class="rule-line" aria-hidden="true">
@@ -656,7 +657,7 @@ main {
 </style>
 
 <script>
-const PLATFORMS = ['youtube','facebook','instagram','tiktok','x','threads'];
+const PLATFORMS = ['youtube','facebook','instagram','tiktok','x','threads','reddit'];
 
 const platformIcons = {
   youtube:   'fa-youtube',
@@ -665,6 +666,7 @@ const platformIcons = {
   tiktok:    'fa-tiktok',
   x:         'fa-x-twitter',
   threads:   'fa-threads',
+  reddit:    'fa-reddit',
 };
 
 function detectPlatform(url) {
@@ -675,6 +677,7 @@ function detectPlatform(url) {
   if (u.includes('tiktok.com') || u.includes('vm.tiktok')) return 'tiktok';
   if (u.includes('x.com') || u.includes('twitter.com')) return 'x';
   if (u.includes('threads.net') || u.includes('threads.com')) return 'threads';
+  if (u.includes('reddit.com') || u.includes('redd.it')) return 'reddit';
   return null;
 }
 
