@@ -12,6 +12,13 @@ Contact: azzar.mr.zs@gmail.com for inquiries.
 <title>Media Downloader — Save Videos &amp; Audio from YouTube, TikTok, Instagram</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#121212">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="/icon-192.png">
+
 <!-- SEO -->
 <meta name="description" content="Free online media downloader. Download videos and audio from YouTube, Instagram, TikTok, Facebook, X, and Threads in MP4/MP3. Fast, no signup required.">
 <meta name="keywords" content="media downloader,video downloader,YouTube downloader,Instagram downloader,TikTok downloader,Facebook downloader,download video,download audio,MP3 converter,MP4 downloader,online downloader,free downloader">
@@ -796,6 +803,11 @@ function setStatus(msg, type, icon) {
     ? `<i class="fa-solid ${icon || 'fa-circle-info'}" aria-hidden="true"></i> ${msg}`
     : '';
   statusMsg.className = 'status-bar' + (type ? ' ' + type : '');
+}
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
 </script>
 </body>
